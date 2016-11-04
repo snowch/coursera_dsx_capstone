@@ -175,72 +175,43 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgYmFzaFxud2dldCBodHRwczovL2QzOTZxdXN6YTQwb3JjLmNsb3VkZnJvbnQubmV0L2Rzc2NhcHN0b25lL2RhdGFzZXQvQ291cnNlcmEtU3dpZnRLZXkuemlwXG51bnppcCBDb3Vyc2VyYS1Td2lmdEtleS56aXBcbmBgYCJ9 -->
-<pre class="bash"><code>wget https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
-unzip Coursera-SwiftKey.zip</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0b29scylcbm1kNSA8LSBtZDVzdW0oJ0NvdXJzZXJhLVN3aWZ0S2V5LnppcCcpXG5pZiAobWQ1ICE9ICdlMDYyOWM2NGIxNzQ3MTAzYTdlNzUxYjBhMzBkMzg1OCcpIHtcbiAgIHVybCA8LSAnaHR0cHM6Ly9kMzk2cXVzemE0MG9yYy5jbG91ZGZyb250Lm5ldC9kc3NjYXBzdG9uZS9kYXRhc2V0L0NvdXJzZXJhLVN3aWZ0S2V5LnppcCdcbiAgIGRvd25sb2FkLmZpbGUodXJsLCBkZXN0ZmlsZSA9ICdDb3Vyc2VyYS1Td2lmdEtleS56aXAnKVxufVxudW56aXAoJ0NvdXJzZXJhLVN3aWZ0S2V5LnppcCcpXG5maWxlLnJlbmFtZShmcm9tID0gJy4vZmluYWwvZW5fVVMvZW5fVVMuYmxvZ3MudHh0JywgICAgdG8gPSAnLi9lbl9VUy5ibG9ncy50eHQnKVxuYGBgIn0= -->
+<pre class="r"><code>library(tools)
+md5 &lt;- md5sum('Coursera-SwiftKey.zip')
+if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
+   url &lt;- 'https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip'
+   download.file(url, destfile = 'Coursera-SwiftKey.zip')
+}
+unzip('Coursera-SwiftKey.zip')
+file.rename(from = './final/en_US/en_US.blogs.txt',    to = './en_US.blogs.txt')</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiLS0yMDE2LTExLTA0IDE2OjU3OjIwLS0gIGh0dHBzOi8vZDM5NnF1c3phNDBvcmMuY2xvdWRmcm9udC5uZXQvZHNzY2Fwc3RvbmUvZGF0YXNldC9Db3Vyc2VyYS1Td2lmdEtleS56aXBcblJlc29sdmluZyBkMzk2cXVzemE0MG9yYy5jbG91ZGZyb250Lm5ldC4uLiA1Mi44NS42Ny4xNSwgNTIuODUuNjcuMTc1LCA1Mi44NS42Ny4yMDEsIC4uLlxuQ29ubmVjdGluZyB0byBkMzk2cXVzemE0MG9yYy5jbG91ZGZyb250Lm5ldHw1Mi44NS42Ny4xNXw6NDQzLi4uIGNvbm5lY3RlZC5cbkhUVFAgcmVxdWVzdCBzZW50LCBhd2FpdGluZyByZXNwb25zZS4uLiAyMDAgT0tcbkxlbmd0aDogNTc0NjYxMTc3ICg1NDhNKSBbYXBwbGljYXRpb24vemlwXVxuU2F2aW5nIHRvOiDigJhDb3Vyc2VyYS1Td2lmdEtleS56aXDigJlcblxuICAgICAwSyAuLi4uLi4uLi4uIC4uLi4uLi4uLi4gLi4uLi4uLi4uLiAuLi4uLi4uLi4uIC4uLi4uLi4uLi4gIDAlICAzMTBLIDMwbTlzXG4gICAgNTBLIC4uLi4uLi4uLi4gLi4uLi4uLi4uLiAuLi4uLi4uLi4uIC4uLi4uLi4uLi4gLi4uLi4uLi4uLiAgMCUgIDM1NUsgMjhtMTVzXG4gICAxMDBLIC4uLi4uLi4uLi4gLi4uLi4uLi4uLiAuLi4uLi4uLi4uIC4uLi4uLi4uLi4gLi4uLi4uLi4uLiAgMCUgIDM2MEsgMjdtMjlzXG4gICAxNTBLIC4uLi4uLi4uLi4gLi4uLi4uLi4uXG4ifQ== -->
-<pre><code>--2016-11-04 16:57:20--  https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
-Resolving d396qusza40orc.cloudfront.net... 52.85.67.15, 52.85.67.175, 52.85.67.201, ...
-Connecting to d396qusza40orc.cloudfront.net|52.85.67.15|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 574661177 (548M) [application/zip]
-Saving to: ‘Coursera-SwiftKey.zip’
-
-     0K .......... .......... .......... .......... ..........  0%  310K 30m9s
-    50K .......... .......... .......... .......... ..........  0%  355K 28m15s
-   100K .......... .......... .......... .......... ..........  0%  360K 27m29s
-   150K .......... .........</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFRSVUVcbiJ9 -->
+<pre><code>[1] TRUE</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsZS5yZW5hbWUoZnJvbSA9ICcuL2ZpbmFsL2VuX1VTL2VuX1VTLm5ld3MudHh0JywgICAgIHRvID0gJy4vZW5fVVMubmV3cy50eHQnKVxuYGBgIn0= -->
+<pre class="r"><code>file.rename(from = './final/en_US/en_US.news.txt',     to = './en_US.news.txt')</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFRSVUVcbiJ9 -->
+<pre><code>[1] TRUE</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsZS5yZW5hbWUoZnJvbSA9ICcuL2ZpbmFsL2VuX1VTL2VuX1VTLnR3aXR0ZXIudHh0JywgIHRvID0gJy4vZW5fVVMudHdpdHRlci50eHQnKVxuYGBgIn0= -->
+<pre class="r"><code>file.rename(from = './final/en_US/en_US.twitter.txt',  to = './en_US.twitter.txt')</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFRSVUVcbiJ9 -->
+<pre><code>[1] TRUE</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW5saW5rKCcuL2ZpbmFsLycsIHJlY3Vyc2l2ZSA9IEZBTFNFKVxuYGBgIn0= -->
+<pre class="r"><code>unlink('./final/', recursive = FALSE)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdGFsbC5wYWNrYWdlcyhcInNsYW1cIiwgIHR5cGU9XCJiaW5hcnlcIilcbmBgYCJ9 -->
-<pre class="r"><code>install.packages(&quot;slam&quot;,  type=&quot;binary&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gIFRoZXJlIGlzIGEgYmluYXJ5IHZlcnNpb24gYXZhaWxhYmxlIChhbmQgd2lsbCBiZSBpbnN0YWxsZWQpIGJ1dCB0aGUgc291cmNlIHZlcnNpb24gaXMgbGF0ZXI6XG4gICAgIGJpbmFyeSBzb3VyY2VcbnNsYW0gMC4xLTM3IDAuMS0zOFxuIn0= -->
-<pre><code>
-  There is a binary version available (and will be installed) but the source version is later:
-     binary source
-slam 0.1-37 0.1-38</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoidHJ5aW5nIFVSTCAnaHR0cHM6Ly9jcmFuLnJzdHVkaW8uY29tL2Jpbi9tYWNvc3gvbWF2ZXJpY2tzL2NvbnRyaWIvMy4zL3NsYW1fMC4xLTM3LnRneidcbkNvbnRlbnQgdHlwZSAnYXBwbGljYXRpb24veC1nemlwJyBsZW5ndGggMTAyNjIwIGJ5dGVzICgxMDAgS0IpXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuZG93bmxvYWRlZCAxMDAgS0JcbiJ9 -->
-<pre><code>trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/slam_0.1-37.tgz'
-Content type 'application/x-gzip' length 102620 bytes (100 KB)
-==================================================
-downloaded 100 KB</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5UaGUgZG93bmxvYWRlZCBiaW5hcnkgcGFja2FnZXMgYXJlIGluXG5cdC92YXIvZm9sZGVycy8wMy9nM215d2hjbjBxZDdqa2hyNzh2Z180NncwMDAwZ24vVC8vUnRtcGthUjl2bi9kb3dubG9hZGVkX3BhY2thZ2VzXG4ifQ== -->
-<pre><code>
-The downloaded binary packages are in
-    /var/folders/03/g3mywhcn0qd7jkhr78vg_46w0000gn/T//RtmpkaR9vn/downloaded_packages</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdGFsbC5wYWNrYWdlcyhcInRtXCIpXG5gYGAifQ== -->
-<pre class="r"><code>install.packages(&quot;tm&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoidHJ5aW5nIFVSTCAnaHR0cHM6Ly9jcmFuLnJzdHVkaW8uY29tL2Jpbi9tYWNvc3gvbWF2ZXJpY2tzL2NvbnRyaWIvMy4zL3RtXzAuNi0yLnRneidcbkNvbnRlbnQgdHlwZSAnYXBwbGljYXRpb24veC1nemlwJyBsZW5ndGggNjY1MzQ3IGJ5dGVzICg2NDkgS0IpXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuZG93bmxvYWRlZCA2NDkgS0JcbiJ9 -->
-<pre><code>trying URL 'https://cran.rstudio.com/bin/macosx/mavericks/contrib/3.3/tm_0.6-2.tgz'
-Content type 'application/x-gzip' length 665347 bytes (649 KB)
-==================================================
-downloaded 649 KB</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5UaGUgZG93bmxvYWRlZCBiaW5hcnkgcGFja2FnZXMgYXJlIGluXG5cdC92YXIvZm9sZGVycy8wMy9nM215d2hjbjBxZDdqa2hyNzh2Z180NncwMDAwZ24vVC8vUnRtcGthUjl2bi9kb3dubG9hZGVkX3BhY2thZ2VzXG4ifQ== -->
-<pre><code>
-The downloaded binary packages are in
-    /var/folders/03/g3mywhcn0qd7jkhr78vg_46w0000gn/T//RtmpkaR9vn/downloaded_packages</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0bSlcbmBgYCJ9 -->
-<pre class="r"><code>library(tm)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBOTFBcbiJ9 -->
-<pre><code>Loading required package: NLP</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 <!-- rnb-text-begin -->
 <div id="tasks" class="section level3">
 <h3>Tasks</h3>
@@ -251,7 +222,7 @@ The downloaded binary packages are in
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge2Jhc2h9CndnZXQgaHR0cHM6Ly9kMzk2cXVzemE0MG9yYy5jbG91ZGZyb250Lm5ldC9kc3NjYXBzdG9uZS9kYXRhc2V0L0NvdXJzZXJhLVN3aWZ0S2V5LnppcAp1bnppcCBDb3Vyc2VyYS1Td2lmdEtleS56aXAKYGBgCgpgYGB7cn0KaW5zdGFsbC5wYWNrYWdlcygic2xhbSIsICB0eXBlPSJiaW5hcnkiKQppbnN0YWxsLnBhY2thZ2VzKCJ0bSIpCmBgYAoKYGBge3J9CmxpYnJhcnkodG0pCmBgYAoKIyMjIFRhc2tzCgotIFRva2VuaXphdGlvbiAtIGlkZW50aWZ5aW5nIGFwcHJvcHJpYXRlIHRva2VucyBzdWNoIGFzIHdvcmRzLCBwdW5jdHVhdGlvbiwgYW5kIG51bWJlcnMuIFdyaXRpbmcgYSBmdW5jdGlvbiB0aGF0IHRha2VzIGEgZmlsZSBhcyBpbnB1dCBhbmQgcmV0dXJucyBhIHRva2VuaXplZCB2ZXJzaW9uIG9mIGl0LgotIFByb2Zhbml0eSBmaWx0ZXJpbmcgLSByZW1vdmluZyBwcm9mYW5pdHkgYW5kIG90aGVyIHdvcmRzIHlvdSBkbyBub3Qgd2FudCB0byBwcmVkaWN0LgoKCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodG9vbHMpCgptZDUgPC0gbWQ1c3VtKCdDb3Vyc2VyYS1Td2lmdEtleS56aXAnKQppZiAobWQ1ICE9ICdlMDYyOWM2NGIxNzQ3MTAzYTdlNzUxYjBhMzBkMzg1OCcpIHsKICAgdXJsIDwtICdodHRwczovL2QzOTZxdXN6YTQwb3JjLmNsb3VkZnJvbnQubmV0L2Rzc2NhcHN0b25lL2RhdGFzZXQvQ291cnNlcmEtU3dpZnRLZXkuemlwJwogICBkb3dubG9hZC5maWxlKHVybCwgZGVzdGZpbGUgPSAnQ291cnNlcmEtU3dpZnRLZXkuemlwJykKfQp1bnppcCgnQ291cnNlcmEtU3dpZnRLZXkuemlwJykKCmZpbGUucmVuYW1lKGZyb20gPSAnLi9maW5hbC9lbl9VUy9lbl9VUy5ibG9ncy50eHQnLCAgICB0byA9ICcuL2VuX1VTLmJsb2dzLnR4dCcpCmZpbGUucmVuYW1lKGZyb20gPSAnLi9maW5hbC9lbl9VUy9lbl9VUy5uZXdzLnR4dCcsICAgICB0byA9ICcuL2VuX1VTLm5ld3MudHh0JykKZmlsZS5yZW5hbWUoZnJvbSA9ICcuL2ZpbmFsL2VuX1VTL2VuX1VTLnR3aXR0ZXIudHh0JywgIHRvID0gJy4vZW5fVVMudHdpdHRlci50eHQnKQoKdW5saW5rKCcuL2ZpbmFsLycsIHJlY3Vyc2l2ZSA9IFRSVUUsIGZvcmNlID0gVFJVRSkKYGBgCgpgYGB7cn0KYGBgCgpgYGB7ciBpbmNsdWRlPUZBTFNFfQppbnN0YWxsLnBhY2thZ2VzKCJzbGFtIiwgIHR5cGU9ImJpbmFyeSIpCmluc3RhbGwucGFja2FnZXMoInRtIikKYGBgCgpgYGB7ciBpbmNsdWRlPUZBTFNFfQpsaWJyYXJ5KHRtKQpgYGAKCiMjIyBUYXNrcwoKLSBUb2tlbml6YXRpb24gLSBpZGVudGlmeWluZyBhcHByb3ByaWF0ZSB0b2tlbnMgc3VjaCBhcyB3b3JkcywgcHVuY3R1YXRpb24sIGFuZCBudW1iZXJzLiBXcml0aW5nIGEgZnVuY3Rpb24gdGhhdCB0YWtlcyBhIGZpbGUgYXMgaW5wdXQgYW5kIHJldHVybnMgYSB0b2tlbml6ZWQgdmVyc2lvbiBvZiBpdC4KLSBQcm9mYW5pdHkgZmlsdGVyaW5nIC0gcmVtb3ZpbmcgcHJvZmFuaXR5IGFuZCBvdGhlciB3b3JkcyB5b3UgZG8gbm90IHdhbnQgdG8gcHJlZGljdC4KCgoK</div>
 
 
 
