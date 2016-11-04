@@ -1,0 +1,26 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{bash}
+wget https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
+unzip Coursera-SwiftKey.zip
+```
+
+```{r}
+install.packages("slam",  type="binary")
+install.packages("tm")
+```
+
+```{r}
+library(tm)
+```
+
+### Tasks
+
+- Tokenization - identifying appropriate tokens such as words, punctuation, and numbers. Writing a function that takes a file as input and returns a tokenized version of it.
+- Profanity filtering - removing profanity and other words you do not want to predict.
+
+
+
