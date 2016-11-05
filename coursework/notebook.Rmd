@@ -13,15 +13,12 @@ if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
 }
 unzip('Coursera-SwiftKey.zip')
 
-file.rename(from = './final/en_US/en_US.blogs.txt',    to = './en_US.blogs.txt')
-file.rename(from = './final/en_US/en_US.news.txt',     to = './en_US.news.txt')
-file.rename(from = './final/en_US/en_US.twitter.txt',  to = './en_US.twitter.txt')
-
-unlink('./final/', recursive = TRUE, force = TRUE)
+# free some space on my drive by removing unneeded files
+unlink('./final/de_DE/', recursive = TRUE, force = TRUE)
+unlink('./final/fi_FI/', recursive = TRUE, force = TRUE)
+unlink('./final/ru_RU/', recursive = TRUE, force = TRUE)
 ```
 
-```{r}
-```
 
 ```{r}
 if(!require(slam)) {
