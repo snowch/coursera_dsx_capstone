@@ -45,22 +45,45 @@ if(!require(wordcloud)) {
 
 ### Tasks
 
-- Tokenization - identifying appropriate tokens such as words, punctuation, and numbers. Writing a function that takes a file as input and returns a tokenized version of it.
-- Profanity filtering - removing profanity and other words you do not want to predict.
+```{r}
+bannedWords <- as.list(read.csv(url('http://www.bannedwordlist.com/lists/swearWords.txt'), header = FALSE))
+# head(bannedWords)
+```
 
 
 ```{r}
+LIMIT_NUM_DOCS <- 5000
+
 con <- file('./en_US.blogs.txt') 
 open(con)
-v <- readLines(con, n=200)
+v <- readLines(con, n=LIMIT_NUM_DOCS)
 close(con)
 vs <- VectorSource(v)
-blog_corpus <-Corpus(vs, readerControl = list(language="en")) 
-#summary(blog_corpus)  #check what went in
+
+removeWordsContaining <-
+function(x, words)
+    UseMethod("removeWordsContaining", x)
+removeWordsContaining.character <-
+function(x, words)
+    gsub(sprintf("(*UCP)\\b[a-zA-Z]*(%s)[a-zA-Z]*\\b",
+                 paste(sort(words, decreasing = TRUE), collapse = "|")),
+         "", x, perl = TRUE)
+removeWordsContaining.PlainTextDocument <-
+    content_transformer(removeWordsContaining.character)
+
+
+blog_corpus <- Corpus(vs, readerControl = list(language="en")) 
+blog_corpus <- tm_map(blog_corpus, content_transformer(tolower))
+blog_corpus <- tm_map(blog_corpus, stripWhitespace) 
+blog_corpus <- tm_map(blog_corpus, removePunctuation) 
+blog_corpus <- tm_map(blog_corpus, removeNumbers) 
+blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english"))) 
+blog_corpus <- tm_map(blog_corpus, removeWordsContaining, bannedWords$V1) 
 ```
 
 ```{r}
-wordcloud(blog_corpus)
+if (LIMIT_NUM_DOCS < 200)
+ wordcloud(blog_corpus)
 ```
 
 ```{r}
@@ -68,6 +91,15 @@ tdm <- TermDocumentMatrix(blog_corpus,
                           control = list(removePunctuation = TRUE,
                                          removeNumbers = TRUE,
                                          stopwords = TRUE))
+inspect(tdm[1:10, 1:50])
+```
+```{r}
+terms <- dimnames(tdm[ ,1:50])$Terms
+inspect(tdm[grep('aadil', terms), 1:50])
+inspect(tdm[grep('fuck', terms), 1:50])
+```
+
+```{r}
 plot(tdm, corThreshold = 0.2, weighting = TRUE)
 ```
 
