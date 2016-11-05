@@ -10,13 +10,14 @@ md5 <- md5sum('Coursera-SwiftKey.zip')
 if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
    url <- 'https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip'
    download.file(url, destfile = 'Coursera-SwiftKey.zip')
+   unzip('Coursera-SwiftKey.zip')
+   
+   # free some space on my drive by removing unneeded files
+   unlink('./final/de_DE/', recursive = TRUE, force = TRUE)
+   unlink('./final/fi_FI/', recursive = TRUE, force = TRUE)
+   unlink('./final/ru_RU/', recursive = TRUE, force = TRUE)
 }
-unzip('Coursera-SwiftKey.zip')
 
-# free some space on my drive by removing unneeded files
-unlink('./final/de_DE/', recursive = TRUE, force = TRUE)
-unlink('./final/fi_FI/', recursive = TRUE, force = TRUE)
-unlink('./final/ru_RU/', recursive = TRUE, force = TRUE)
 ```
 
 
@@ -88,12 +89,18 @@ tdm <- TermDocumentMatrix(blog_corpus,
                           control = list(removePunctuation = TRUE,
                                          removeNumbers = TRUE,
                                          stopwords = TRUE))
-inspect(tdm[1:10, 1:50])
+inspect(tdm[1:10, 1:25])
 ```
 ```{r}
 terms <- dimnames(tdm[ ,1:50])$Terms
-inspect(tdm[grep('aadil', terms), 1:50])
-inspect(tdm[grep('fuck', terms), 1:50])
+```
+
+```{r}
+inspect(tdm[grep('aadil', terms), 1:25])
+```
+
+```{r}
+inspect(tdm[grep('fuck', terms), 1:25])
 ```
 
 ```{r}
