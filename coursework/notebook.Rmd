@@ -42,14 +42,6 @@ if(!require(wordcloud)) {
   install.packages("wordcloud")
   library(wordcloud)
 }
-#if(!require(rJava)) {
-#  install.packages("rJava","http://rforge.net/",type="source")
-#  library(rJava)
-#}
-#if(!require(RWeka)) {
-#  install.packages("RWeka")
-#  library(RWeka)
-#}
 ```
 
 ### Tasks
@@ -118,12 +110,6 @@ plot(tdm, corThreshold = 0.2, weighting = TRUE)
 ```
 
 ```{r}
-# this seems to be reading blog_corpus meta
-t <- MC_tokenizer(blog_corpus)
-head(t, 100)
-```
-
-```{r}
 ngramDTM <- function (ngrams) {
   TrigramTokenizer <-
     function(x)
@@ -137,22 +123,22 @@ ngramDTM <- function (ngrams) {
 
 ```{r}
 digrams = ngramDTM(2)
-digrams[1:5, 1:5]
+digrams[1:5, 1:3]
 ```
 
 ```{r}
 numcols = dim(digrams)[2]
-digrams[1:5, (numcols-5):numcols]
+digrams[1:5, (numcols-3):numcols]
 ```
 
 ```{r}
 trigrams = ngramDTM(3)
-trigrams[1:5, 1:5]
+trigrams[1:5, 1:3]
 ```
 
 ```{r}
 numcols = dim(trigrams)[2]
-trigrams[1:5, (numcols-5):numcols]
+trigrams[1:5, (numcols-3):numcols]
 ```
 
 Task
