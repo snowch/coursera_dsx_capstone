@@ -24,7 +24,7 @@ if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
 ```
 
 
-```{r message=FALSE}
+```{r results='hide', message=FALSE, warning=FALSE}
 if(!require(slam)) {
   install.packages("slam",  type="binary")
   library(slam)
