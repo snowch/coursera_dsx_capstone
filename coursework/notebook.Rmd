@@ -94,7 +94,7 @@ tdm <- TermDocumentMatrix(blog_corpus,
                           control = list(removePunctuation = TRUE,
                                          removeNumbers = TRUE,
                                          stopwords = TRUE))
-inspect(tdm[1:10, 1:25])
+inspect(tdm[1:10, 1:10])
 ```
 
 ```{r}
@@ -102,11 +102,11 @@ terms <- dimnames(tdm[ ,1:50])$Terms
 ```
 
 ```{r}
-inspect(tdm[grep('aadil', terms), 1:25])
+inspect(tdm[grep('aadil', terms), 1:10])
 ```
 
 ```{r}
-inspect(tdm[grep('fuck', terms), 1:25])
+inspect(tdm[grep('fuck', terms), 1:10])
 ```
 
 ```{r}
