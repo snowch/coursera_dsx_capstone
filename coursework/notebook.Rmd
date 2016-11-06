@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-```{r}
+```{r message=FALSE}
 library(tools)
 
 md5 <- md5sum('Coursera-SwiftKey.zip')
@@ -24,7 +24,7 @@ if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
 ```
 
 
-```{r}
+```{r message=FALSE}
 if(!require(slam)) {
   install.packages("slam",  type="binary")
   library(slam)
