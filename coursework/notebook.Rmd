@@ -39,6 +39,14 @@ if(!require(wordcloud)) {
   install.packages("wordcloud")
   library(wordcloud)
 }
+#if(!require(rJava)) {
+#  install.packages("rJava","http://rforge.net/",type="source")
+#  library(rJava)
+#}
+#if(!require(RWeka)) {
+#  install.packages("RWeka")
+#  library(RWeka)
+#}
 ```
 
 ### Tasks
@@ -68,7 +76,6 @@ function(x, words)
          "", x, perl = TRUE)
 removeWordsContaining.PlainTextDocument <-
     content_transformer(removeWordsContaining.character)
-
 
 blog_corpus <- Corpus(vs, readerControl = list(language="en")) 
 blog_corpus <- tm_map(blog_corpus, content_transformer(tolower))
@@ -113,3 +120,16 @@ t <- MC_tokenizer(blog_corpus)
 head(t, 100)
 ```
 
+```{r}
+TrigramTokenizer <-
+  function(x)
+    unlist(lapply(ngrams(words(x), 3), paste, collapse = " "), use.names = FALSE)
+
+datmat<- DocumentTermMatrix(blog_corpus, control = list(tokenize = TrigramTokenizer))
+
+dat<- as.matrix(datmat)
+```
+
+```{r}
+dat[1:5, 1:5]
+```
