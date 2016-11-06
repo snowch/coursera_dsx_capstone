@@ -78,7 +78,7 @@ blog_corpus <- tm_map(blog_corpus, content_transformer(tolower))
 blog_corpus <- tm_map(blog_corpus, stripWhitespace) 
 blog_corpus <- tm_map(blog_corpus, removePunctuation) 
 blog_corpus <- tm_map(blog_corpus, removeNumbers) 
-blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english"))) 
+#blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english"))) 
 blog_corpus <- tm_map(blog_corpus, removeWordsContaining, bannedWords$V1) 
 ```
 
@@ -134,8 +134,26 @@ digrams[1:5, 1:3]
 
 
 ```{r}
+digramsCounts <- rowSums(digrams)
+head(as.matrix(digramsCounts))
+tail(as.matrix(digramsCounts))
+```
+
+```{r}
+digramsGT10 <- digramsCounts[ digramsCounts > 10 ]
+as.matrix (
+  digramsGT10[ head( order( digramsGT10, decreasing = T), 25 ) ]
+)
+```
+
+
+```{r}
 trigrams = ngramDTM(3)
-trigrams[1:5, 1:3]
+trigramsCounts <- rowSums(trigrams)
+trigramsGT10 <- trigramsCounts[ trigramsCounts > 10 ]
+as.matrix (
+  trigramsGT10[ head( order( trigramsGT10, decreasing = T), 25 ) ]
+)
 ```
 
 ## Tasks
