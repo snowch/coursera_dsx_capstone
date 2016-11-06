@@ -1,7 +1,10 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "capstone"
+author: "Chris Snow"
+date: "06/11/2016"
+output: html_document
 ---
+
 
 ```{r}
 library(tools)
