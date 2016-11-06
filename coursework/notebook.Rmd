@@ -121,7 +121,7 @@ ngramDTM <- function (ngrams) {
     function(x)
       unlist(lapply(ngrams(words(x), ngrams), paste, collapse = " "), use.names = FALSE)
   
-  datmat <- DocumentTermMatrix(blog_corpus, control = list(tokenize = TrigramTokenizer))
+  datmat <- TermDocumentMatrix(blog_corpus, control = list(tokenize = TrigramTokenizer))
   
   return(as.matrix(datmat))
 }
@@ -132,19 +132,10 @@ digrams = ngramDTM(2)
 digrams[1:5, 1:3]
 ```
 
-```{r}
-numcols = dim(digrams)[2]
-digrams[1:5, (numcols-2):numcols]
-```
 
 ```{r}
 trigrams = ngramDTM(3)
 trigrams[1:5, 1:3]
-```
-
-```{r}
-numcols = dim(trigrams)[2]
-trigrams[1:5, (numcols-2):numcols]
 ```
 
 ## Tasks
