@@ -150,6 +150,8 @@ Questions
 4.	How do you evaluate how many of the words come from foreign languages? 
 5.	Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
 
+---
+
 Task
 
 1.	Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
@@ -164,6 +166,8 @@ Questions
 5.	How do you evaluate whether your model is any good?
 6.	How can you use backoff models to estimate the probability of unobserved n-grams?
 
+---
+
 Task
 
 1.	Build a predictive model based on the previous data modeling steps - you may combine the models in any way you think is appropriate.
@@ -177,6 +181,8 @@ Questions
 3.	Does perplexity correlate with the other measures of accuracy?
 4.	Can you reduce the size of the model (number of parameters) without reducing performance?
 
+---
+
 Task
 
 1.	Explore new models and data to improve your predictive model.
@@ -189,6 +195,8 @@ Questions
 3.	What are the most commonly missed n-grams? Can you think of a reason why they would be missed and fix that? 
 4.	What are some other things that other people have tried to improve their model? 
 5.	Can you estimate how uncertain you are about the words you are predicting? 
+
+---
 
 Task
 
@@ -204,6 +212,8 @@ Question
 Tips
 
 Consider the size of the predictive model you have developed. You may have to sacrifice some accuracy to have a fast enough/small enough model to load into Shiny. 
+
+---
 
 Task
 
