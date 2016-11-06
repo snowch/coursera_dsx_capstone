@@ -5,6 +5,7 @@ date: "06/11/2016"
 output: html_document
 ---
 
+## Load the raw data
 
 ```{r message=FALSE}
 library(tools)
@@ -20,9 +21,9 @@ if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
    unlink('./final/fi_FI/', recursive = TRUE, force = TRUE)
    unlink('./final/ru_RU/', recursive = TRUE, force = TRUE)
 }
-
 ```
 
+## Load required packages
 
 ```{r results='hide', message=FALSE, warning=FALSE}
 if(!require(slam)) {
@@ -44,7 +45,7 @@ if(!require(wordcloud)) {
 }
 ```
 
-### Tasks
+## Create the corpus
 
 ```{r}
 bannedWords <- as.list(read.csv(url('http://www.bannedwordlist.com/lists/swearWords.txt'), header = FALSE))
@@ -55,7 +56,7 @@ bannedWords <- as.list(read.csv(url('http://www.bannedwordlist.com/lists/swearWo
 ```{r}
 LIMIT_NUM_DOCS <- 5000
 
-con <- file('./en_US.blogs.txt') 
+con <- file('./final/en_US/en_US.blogs.txt') 
 open(con)
 v <- readLines(con, n=LIMIT_NUM_DOCS)
 close(con)
@@ -81,6 +82,8 @@ blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english")))
 blog_corpus <- tm_map(blog_corpus, removeWordsContaining, bannedWords$V1) 
 ```
 
+## Tokenize to plain TermDocumentMatrix
+
 ```{r}
 if (LIMIT_NUM_DOCS < 200)
  wordcloud(blog_corpus)
@@ -93,6 +96,7 @@ tdm <- TermDocumentMatrix(blog_corpus,
                                          stopwords = TRUE))
 inspect(tdm[1:10, 1:25])
 ```
+
 ```{r}
 terms <- dimnames(tdm[ ,1:50])$Terms
 ```
@@ -108,6 +112,8 @@ inspect(tdm[grep('fuck', terms), 1:25])
 ```{r}
 plot(tdm, corThreshold = 0.2, weighting = TRUE)
 ```
+
+## Tokenize to ngrams
 
 ```{r}
 ngramDTM <- function (ngrams) {
@@ -140,6 +146,8 @@ trigrams[1:5, 1:3]
 numcols = dim(trigrams)[2]
 trigrams[1:5, (numcols-2):numcols]
 ```
+
+## Tasks
 
 Task
 
