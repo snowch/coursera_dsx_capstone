@@ -54,7 +54,7 @@ bannedWords <- as.list(read.csv(url('http://www.bannedwordlist.com/lists/swearWo
 
 
 ```{r}
-LIMIT_NUM_DOCS <- 5000
+LIMIT_NUM_DOCS <- 500
 
 con <- file('./final/en_US/en_US.blogs.txt') 
 open(con)
@@ -113,7 +113,7 @@ inspect(tdm[grep('fuck', terms), 1:10])
 plot(tdm, corThreshold = 0.2, weighting = TRUE)
 ```
 
-## Tokenize to ngrams
+## Tokenize to ngrams - What are the frequencies of 2-grams and 3-grams in the dataset?
 
 ```{r}
 ngramDTM <- function (ngrams) {
@@ -156,6 +156,50 @@ as.matrix (
 )
 ```
 
+## How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%? 
+
+This is a sentence to understand how to count word instances and perform a frequency analysis.
+
+2. a
+2. to
+1. This
+1. is
+1. sentence
+1. understand
+1. how
+1. count
+1. word
+1. instances
+1. and
+1. perform
+1. frequency
+1. analysis
+
+
+```{r echo=FALSE}
+temp <- inspect(tdm)
+FreqMat <- data.frame(ST = rownames(temp), Freq = rowSums(temp))
+row.names(FreqMat) <- NULL
+```
+
+```{r echo=FALSE}
+FreqMatDF <- as.data.frame(FreqMat)
+FreqMatDF <- FreqMatDF[order(FreqMatDF$Freq, decreasing = TRUE), ]
+FreqMatDF$cumsum <- cumsum(FreqMatDF$Freq)
+totalWords <- sum(FreqMatDF$Freq)
+```
+
+50% of corpus is covered by the following unique words
+```{r}
+print( nrow(FreqMatDF[FreqMatDF$cumsum < (totalWords * 0.5), ]) )
+```
+
+90% of corpus is covered by the following unique words
+```{r}
+print( nrow(FreqMatDF[FreqMatDF$cumsum < (totalWords * 0.9), ]) )
+```
+
+
 ## Tasks
 
 Task
@@ -166,7 +210,7 @@ Task
 Questions
 
 1.	Some words are more frequent than others - what are the distributions of word frequencies? 
-2.	What are the frequencies of 2-grams and 3-grams in the dataset? 
+2.	What are the frequencies of 2-grams and 3-grams in the dataset?
 3.	How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%? 
 4.	How do you evaluate how many of the words come from foreign languages? 
 5.	Can you think of a way to increase the coverage -- identifying words that may not be in the corpora or using a smaller number of words in the dictionary to cover the same number of phrases?
