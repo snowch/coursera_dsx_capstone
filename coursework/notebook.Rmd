@@ -56,9 +56,24 @@ bannedWords <- as.list(read.csv(url('http://www.bannedwordlist.com/lists/swearWo
 ```{r}
 LIMIT_NUM_DOCS <- 500
 
+## blogs
 con <- file('./final/en_US/en_US.blogs.txt') 
 open(con)
 v <- readLines(con, n=LIMIT_NUM_DOCS)
+close(con)
+vs <- VectorSource(v)
+
+## news
+con <- file('./final/en_US/en_US.news.txt') 
+open(con)
+v <- append(v, readLines(con, n=LIMIT_NUM_DOCS))
+close(con)
+vs <- VectorSource(v)
+
+## twitter
+con <- file('./final/en_US/en_US.twitter.txt') 
+open(con)
+v <- append(v, readLines(con, n=LIMIT_NUM_DOCS))
 close(con)
 vs <- VectorSource(v)
 
