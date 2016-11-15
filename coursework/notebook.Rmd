@@ -160,29 +160,29 @@ as.matrix (
 
 This is a sentence to understand how to count word instances and perform a frequency analysis.
 
-2. a
-2. to
-1. This
-1. is
-1. sentence
-1. understand
-1. how
-1. count
-1. word
-1. instances
-1. and
-1. perform
-1. frequency
-1. analysis
+ - '2' a
+ - '2' to
+ - '1' This
+ - '1' is
+ - '1' sentence
+ - '1' understand
+ - '1' how
+ - '1' count
+ - '1' word
+ - '1' instances
+ - '1' and
+ - '1' perform
+ - '1' frequency
+ - '1' analysis
 
 
-```{r echo=FALSE}
+```{r results="hide", fig.show="hide"}
 temp <- inspect(tdm)
 FreqMat <- data.frame(ST = rownames(temp), Freq = rowSums(temp))
 row.names(FreqMat) <- NULL
 ```
 
-```{r echo=FALSE}
+```{r results="hide", fig.show="hide"}
 FreqMatDF <- as.data.frame(FreqMat)
 FreqMatDF <- FreqMatDF[order(FreqMatDF$Freq, decreasing = TRUE), ]
 FreqMatDF$cumsum <- cumsum(FreqMatDF$Freq)
