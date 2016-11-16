@@ -7,7 +7,7 @@ output: html_document
 
 ## Load the raw data
 
-```{r message=FALSE}
+```{r load_raw_data, message=FALSE}
 library(tools)
 
 md5 <- md5sum('Coursera-SwiftKey.zip')
@@ -21,6 +21,8 @@ if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
    unlink('./final/fi_FI/', recursive = TRUE, force = TRUE)
    unlink('./final/ru_RU/', recursive = TRUE, force = TRUE)
 }
+
+rm(md5)
 ```
 
 ## Load required packages
@@ -47,35 +49,40 @@ if(!require(wordcloud)) {
 
 ## Create the corpus
 
-```{r}
-bannedWords <- as.list(read.csv(url('http://www.bannedwordlist.com/lists/swearWords.txt'), header = FALSE))
-# head(bannedWords)
+Limit the number of docs from each source because the full dataset will require too much computing resource to process.  A better approach may be to randomly sample lines rather than reading then all.
+
+```{r limit_variable}
+LIMIT_NUM_DOCS <- 2000
 ```
 
-
-```{r}
-LIMIT_NUM_DOCS <- 500
-
+```{r load_data}
 ## blogs
 con <- file('./final/en_US/en_US.blogs.txt') 
 open(con)
-v <- readLines(con, n=LIMIT_NUM_DOCS)
+v <- readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE)
 close(con)
 vs <- VectorSource(v)
 
 ## news
 con <- file('./final/en_US/en_US.news.txt') 
 open(con)
-v <- append(v, readLines(con, n=LIMIT_NUM_DOCS))
+v <- append(v, readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE))
 close(con)
 vs <- VectorSource(v)
 
 ## twitter
 con <- file('./final/en_US/en_US.twitter.txt') 
 open(con)
-v <- append(v, readLines(con, n=LIMIT_NUM_DOCS))
+v <- append(v, readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE))
 close(con)
 vs <- VectorSource(v)
+
+rm(v, con)
+```
+
+```{r create_corpus}
+bannedWords <- as.list(read.csv(url('http://www.bannedwordlist.com/lists/swearWords.txt'), header = FALSE))
+# head(bannedWords)
 
 removeWordsContaining <-
 function(x, words)
@@ -94,17 +101,20 @@ blog_corpus <- tm_map(blog_corpus, stripWhitespace)
 blog_corpus <- tm_map(blog_corpus, removePunctuation) 
 blog_corpus <- tm_map(blog_corpus, removeNumbers) 
 #blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english"))) 
-blog_corpus <- tm_map(blog_corpus, removeWordsContaining, bannedWords$V1) 
+blog_corpus <- tm_map(blog_corpus, removeWordsContaining, bannedWords$V1)
+
+# remove vs
+rm(vs, bannedWords)
 ```
 
 ## Tokenize to plain TermDocumentMatrix
 
-```{r}
-if (LIMIT_NUM_DOCS < 200)
- wordcloud(blog_corpus)
+```{r word_cloud, warning=FALSE}
+wordcloud(words = blog_corpus, min.freq = 30)
+rm(pal, LIMIT_NUM_DOCS)
 ```
 
-```{r}
+```{r create_term_document_matrix}
 tdm <- TermDocumentMatrix(blog_corpus,
                           control = list(removePunctuation = TRUE,
                                          removeNumbers = TRUE,
@@ -204,14 +214,30 @@ FreqMatDF$cumsum <- cumsum(FreqMatDF$Freq)
 totalWords <- sum(FreqMatDF$Freq)
 ```
 
-50% of corpus is covered by the following unique words
+50% of corpus is covered by this number of unique words:
 ```{r}
 print( nrow(FreqMatDF[FreqMatDF$cumsum < (totalWords * 0.5), ]) )
 ```
 
-90% of corpus is covered by the following unique words
+90% of corpus is covered by this number of unique words:
 ```{r}
 print( nrow(FreqMatDF[FreqMatDF$cumsum < (totalWords * 0.9), ]) )
+```
+
+## Non English words
+
+```{r non_english_words}
+english_words <- as.vector(FreqMatDF$ST[grepl("^[[:digit:][:alpha:]]+$", FreqMatDF$ST)])
+num_english_words <- length(english_words)
+
+num_non_english_words <- as.integer(totalWords) - as.integer(num_english_words)
+print( num_non_english_words )
+```
+
+Percentage of non-english words - this seems too high
+
+```{r pct_non_english_words}
+print( num_non_english_words / totalWords )
 ```
 
 ## Assignment 1
