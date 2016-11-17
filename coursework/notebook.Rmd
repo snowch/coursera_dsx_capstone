@@ -25,6 +25,15 @@ if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
 rm(md5)
 ```
 
+This is non portable as it requires unix wordcount (wc) utility, however it's very simple:
+
+```{r unix_wc}
+print(system('wc ./final/en_US/en_US.blogs.txt', intern = TRUE))
+print(system('wc ./final/en_US/en_US.news.txt', intern = TRUE))
+print(system('wc ./final/en_US/en_US.twitter.txt', intern = TRUE))
+```
+The output from wc is:  num_lines, num_words, num_chars
+
 ## Load required packages
 
 ```{r results='hide', message=FALSE, warning=FALSE}
@@ -61,20 +70,19 @@ con <- file('./final/en_US/en_US.blogs.txt')
 open(con)
 v <- readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE)
 close(con)
-vs <- VectorSource(v)
 
 # news
 con <- file('./final/en_US/en_US.news.txt') 
 open(con)
 v <- append(v, readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE))
 close(con)
-vs <- VectorSource(v)
 
 # twitter
 con <- file('./final/en_US/en_US.twitter.txt') 
 open(con)
 v <- append(v, readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE))
 close(con)
+
 vs <- VectorSource(v)
 
 rm(v, con)
@@ -105,7 +113,7 @@ blog_corpus <- tm_map(blog_corpus, removeNumbers)
 # blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english")))
 
 # news corpus has some unicode characters that need to be removed
-(ct <- content_transformer(function(x, pattern) gsub(pattern, "", x)))
+ct <- content_transformer(function(x, pattern) gsub(pattern, "", x))
 blog_corpus <- tm_map(blog_corpus, ct, "\u0095")
 blog_corpus <- tm_map(blog_corpus, ct, "\u0096")
 blog_corpus <- tm_map(blog_corpus, ct, "\u0097")
@@ -120,7 +128,7 @@ rm(vs, bannedWords)
 
 ```{r word_cloud, warning=FALSE}
 wordcloud(words = blog_corpus, min.freq = 30)
-rm(pal, LIMIT_NUM_DOCS)
+rm(LIMIT_NUM_DOCS)
 ```
 
 ```{r create_term_document_matrix}
@@ -139,12 +147,10 @@ terms <- dimnames(tdm[ ,1:50])$Terms
 inspect(tdm[grep('aadil', terms), 1:10])
 ```
 
-```{r}
-inspect(tdm[grep('fuck', terms), 1:10])
-```
+Verify that bannedWords have been removed:
 
 ```{r}
-plot(tdm, corThreshold = 0.2, weighting = TRUE)
+inspect(tdm[grep('fuck', terms), 1:10])
 ```
 
 ## Tokenize to ngrams - What are the frequencies of 2-grams and 3-grams in the dataset?
@@ -249,9 +255,6 @@ print( num_english_words )
 
 num_non_english_words <- length(non_english_words)
 print( num_non_english_words )
-```
-
-```{r}
 ```
 
 Percentage of non-english words
