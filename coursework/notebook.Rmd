@@ -63,14 +63,14 @@ v <- readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE)
 close(con)
 vs <- VectorSource(v)
 
-## news
+# news
 con <- file('./final/en_US/en_US.news.txt') 
 open(con)
 v <- append(v, readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE))
 close(con)
 vs <- VectorSource(v)
 
-## twitter
+# twitter
 con <- file('./final/en_US/en_US.twitter.txt') 
 open(con)
 v <- append(v, readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE))
@@ -100,7 +100,16 @@ blog_corpus <- tm_map(blog_corpus, content_transformer(tolower))
 blog_corpus <- tm_map(blog_corpus, stripWhitespace) 
 blog_corpus <- tm_map(blog_corpus, removePunctuation) 
 blog_corpus <- tm_map(blog_corpus, removeNumbers) 
-#blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english"))) 
+
+# the most common n-gram models are based on stop words - we don't want to remove them
+# blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english")))
+
+# news corpus has some unicode characters that need to be removed
+(ct <- content_transformer(function(x, pattern) gsub(pattern, "", x)))
+blog_corpus <- tm_map(blog_corpus, ct, "\u0095")
+blog_corpus <- tm_map(blog_corpus, ct, "\u0096")
+blog_corpus <- tm_map(blog_corpus, ct, "\u0097")
+
 blog_corpus <- tm_map(blog_corpus, removeWordsContaining, bannedWords$V1)
 
 # remove vs
@@ -228,16 +237,27 @@ print( nrow(FreqMatDF[FreqMatDF$cumsum < (totalWords * 0.9), ]) )
 
 ```{r non_english_words}
 english_words <- as.vector(FreqMatDF$ST[grepl("^[[:digit:][:alpha:]]+$", FreqMatDF$ST)])
-num_english_words <- length(english_words)
+head(english_words)
+tail(english_words)
 
-num_non_english_words <- as.integer(totalWords) - as.integer(num_english_words)
+non_english_words <- as.vector(FreqMatDF$ST[grepl("^[^[:digit:][:alpha:]]+$", FreqMatDF$ST)])
+head(non_english_words)
+tail(non_english_words)
+
+num_english_words <- length(english_words)
+print( num_english_words )
+
+num_non_english_words <- length(non_english_words)
 print( num_non_english_words )
 ```
 
-Percentage of non-english words - this seems too high
+```{r}
+```
+
+Percentage of non-english words
 
 ```{r pct_non_english_words}
-print( num_non_english_words / totalWords )
+print( num_non_english_words / (num_english_words + num_non_english_words))
 ```
 
 ## Assignment 1
