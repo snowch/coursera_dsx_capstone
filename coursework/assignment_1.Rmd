@@ -1,5 +1,5 @@
 ---
-title: "capstone"
+title: "Assignment 1 - exploratory analysis"
 author: "Chris Snow"
 date: "06/11/2016"
 output: html_document
@@ -7,9 +7,9 @@ output: html_document
 
 # Overview
 
-This report ...
+This report is an exploratory analysis of three data files containing blog, news and twitter data.  This analysis is the first step in a project to build a predictive typing model that helps suggests words and spellings as users are typing text into a device such as a mobile phone. 
 
-Contains only high level summary.  For the interested mind, the markdown source for this report can be found here: https://github.com/snowch/coursera_dsx_capstone/blob/master/coursework/assignment_1.Rmd
+This report contains only a high level summary of the exploratory analysis.  For those interested in more information, the markdown source for this report can be found here: https://github.com/snowch/coursera_dsx_capstone/blob/master/coursework/assignment_1.Rmd
 
 # Summary Statistics
 
