@@ -1,0 +1,286 @@
+---
+title: "capstone"
+author: "Chris Snow"
+date: "06/11/2016"
+output: html_document
+---
+
+## Load the raw data
+
+```{r load_raw_data, message=FALSE}
+library(tools)
+
+md5 <- md5sum('Coursera-SwiftKey.zip')
+if (md5 != 'e0629c64b1747103a7e751b0a30d3858') {
+   url <- 'https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip'
+   download.file(url, destfile = 'Coursera-SwiftKey.zip')
+   unzip('Coursera-SwiftKey.zip')
+   
+   # free some space on my drive by removing unneeded files
+   unlink('./final/de_DE/', recursive = TRUE, force = TRUE)
+   unlink('./final/fi_FI/', recursive = TRUE, force = TRUE)
+   unlink('./final/ru_RU/', recursive = TRUE, force = TRUE)
+}
+
+rm(md5)
+```
+
+This is non portable as it requires unix wordcount (wc) utility, however it's very simple:
+
+```{r unix_wc}
+print(system('wc ./final/en_US/en_US.blogs.txt', intern = TRUE))
+print(system('wc ./final/en_US/en_US.news.txt', intern = TRUE))
+print(system('wc ./final/en_US/en_US.twitter.txt', intern = TRUE))
+```
+The output from wc is:  num_lines, num_words, num_chars
+
+## Load required packages
+
+```{r results='hide', message=FALSE, warning=FALSE}
+if(!require(slam)) {
+  install.packages("slam",  type="binary")
+  library(slam)
+}
+if(!require(tm)) {
+  install.packages("tm")
+  library(tm)
+}
+if(!require(Rgraphviz)) {
+  source("http://bioconductor.org/biocLite.R")
+  biocLite("Rgraphviz", ask = FALSE)
+  library(Rgraphviz)
+}
+if(!require(wordcloud)) {
+  install.packages("wordcloud")
+  library(wordcloud)
+}
+if(!require(ggplot2)) {
+  install.packages("ggplot2")
+  library(ggplot2)
+}
+```
+
+## Create the corpus
+
+Limit the number of docs from each source because the full dataset will require too much computing resource to process.  A better approach may be to randomly sample lines rather than reading then all.
+
+```{r limit_variable}
+LIMIT_NUM_DOCS <- 2000
+```
+
+```{r load_data}
+## blogs
+con <- file('./final/en_US/en_US.blogs.txt') 
+open(con)
+v <- readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE)
+close(con)
+
+# news
+con <- file('./final/en_US/en_US.news.txt') 
+open(con)
+v <- append(v, readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE))
+close(con)
+
+# twitter
+con <- file('./final/en_US/en_US.twitter.txt') 
+open(con)
+v <- append(v, readLines(con, n=LIMIT_NUM_DOCS, skipNul=TRUE))
+close(con)
+
+vs <- VectorSource(v)
+
+rm(v, con)
+```
+
+```{r create_corpus}
+bannedWords <- as.list(read.csv(url('http://www.bannedwordlist.com/lists/swearWords.txt'), header = FALSE))
+# head(bannedWords)
+
+blog_corpus <- Corpus(vs, readerControl = list(language="en")) 
+blog_corpus <- tm_map(blog_corpus, content_transformer(tolower))
+blog_corpus <- tm_map(blog_corpus, stripWhitespace) 
+blog_corpus <- tm_map(blog_corpus, removePunctuation) 
+blog_corpus <- tm_map(blog_corpus, removeNumbers) 
+
+# the most common n-gram models are based on stop words - we don't want to remove them
+# blog_corpus <- tm_map(blog_corpus, removeWords, c(stopwords("english")))
+
+# news corpus has some unicode characters that need to be removed
+ct <- content_transformer(function(x, pattern) gsub(pattern, "", x))
+blog_corpus <- tm_map(blog_corpus, ct, "\u0095")
+blog_corpus <- tm_map(blog_corpus, ct, "\u0096")
+blog_corpus <- tm_map(blog_corpus, ct, "\u0097")
+
+# create function to remove words containing a banned word, e.g. *word*
+
+removeWordsContaining <-
+function(x, words)
+    UseMethod("removeWordsContaining", x)
+removeWordsContaining.character <-
+function(x, words)
+    gsub(sprintf("(*UCP)\\b[a-zA-Z]*(%s)[a-zA-Z]*\\b",
+                 paste(sort(words, decreasing = TRUE), collapse = "|")),
+         "", x, perl = TRUE)
+removeWordsContaining.PlainTextDocument <-
+    content_transformer(removeWordsContaining.character)
+
+# filter out the banned words using out removeWordsContaining function
+blog_corpus <- tm_map(blog_corpus, removeWordsContaining, bannedWords$V1)
+
+rm(vs, bannedWords)
+```
+
+Visualise the wordcloud for the data
+
+```{r word_cloud, warning=FALSE}
+wordcloud(words = blog_corpus, min.freq = 30)
+rm(LIMIT_NUM_DOCS)
+```
+
+## Tokenize to plain TermDocumentMatrix
+
+```{r create_term_document_matrix}
+tdm <- TermDocumentMatrix(blog_corpus,
+                          control = list(removePunctuation = TRUE,
+                                         removeNumbers = TRUE,
+                                         stopwords = FALSE))
+```
+
+Visualise the TDM, to understand how it is storing the data
+
+```{r first_ten_records_of_tdm}
+inspect(tdm[1:10, 1:10])
+```
+
+```{r}
+# get a list of the first 50 terms
+terms <- dimnames(tdm[ ,1:50])$Terms
+```
+
+View how a common word like 'and' may be distributed in the TDM
+
+```{r}
+inspect(tdm[grep('^and$', terms), 1:10])
+```
+
+Verify that bannedWords have been removed:
+
+```{r}
+inspect(tdm[grep('fuck', terms), 1:10])
+```
+
+## Tokenize to ngrams - What are the frequencies of 2-grams and 3-grams in the dataset?
+
+```{r}
+ngramDTM <- function (ngrams) {
+  TrigramTokenizer <-
+    function(x)
+      unlist(lapply(ngrams(words(x), ngrams), paste, collapse = " "), use.names = FALSE)
+  
+  datmat <- TermDocumentMatrix(blog_corpus, control = list(tokenize = TrigramTokenizer))
+  
+  return(as.matrix(datmat))
+}
+```
+
+```{r}
+digrams = ngramDTM(2)
+digrams[1:5, 1:3]
+```
+
+
+```{r}
+digramsCounts <- rowSums(digrams)
+head(as.matrix(digramsCounts))
+tail(as.matrix(digramsCounts))
+```
+
+```{r}
+digramsGT10 <- digramsCounts[ digramsCounts > 10 ]
+as.matrix (
+  digramsGT10[ head( order( digramsGT10, decreasing = T), 25 ) ]
+)
+```
+
+
+```{r}
+trigrams = ngramDTM(3)
+trigramsCounts <- rowSums(trigrams)
+trigramsGT10 <- trigramsCounts[ trigramsCounts > 10 ]
+as.matrix (
+  trigramsGT10[ head( order( trigramsGT10, decreasing = T), 25 ) ]
+)
+```
+
+## How many unique words do you need in a frequency sorted dictionary to cover 50% of all word instances in the language? 90%? 
+
+This is a sentence to understand how to count word instances and perform a frequency analysis.
+
+ - '2' a
+ - '2' to
+ - '1' This
+ - '1' is
+ - '1' sentence
+ - '1' understand
+ - '1' how
+ - '1' count
+ - '1' word
+ - '1' instances
+ - '1' and
+ - '1' perform
+ - '1' frequency
+ - '1' analysis
+
+
+```{r results="hide", fig.show="hide"}
+temp <- inspect(tdm)
+FreqMat <- data.frame(ST = rownames(temp), Freq = rowSums(temp))
+row.names(FreqMat) <- NULL
+```
+
+```{r results="hide", fig.show="hide"}
+FreqMatDF <- as.data.frame(FreqMat)
+FreqMatDF <- FreqMatDF[order(FreqMatDF$Freq, decreasing = TRUE), ]
+FreqMatDF$cumsum <- cumsum(FreqMatDF$Freq)
+totalWords <- sum(FreqMatDF$Freq)
+head(FreqMatDF)
+```
+```{r}
+ST <- rownames(temp)
+plot(FreqMatDF$Freq, log="y", xlab="Frequency Ranked ID", ylab="Frequency of word (log scale)", main="Frequency of terms")
+```
+
+50% of corpus is covered by this number of unique words:
+```{r}
+print( nrow(FreqMatDF[FreqMatDF$cumsum < (totalWords * 0.5), ]) )
+```
+
+90% of corpus is covered by this number of unique words:
+```{r}
+print( nrow(FreqMatDF[FreqMatDF$cumsum < (totalWords * 0.9), ]) )
+```
+
+## Non English words
+
+```{r non_english_words}
+english_words <- as.vector(FreqMatDF$ST[grepl("^[[:digit:][:alpha:]]+$", FreqMatDF$ST)])
+head(english_words)
+tail(english_words)
+
+non_english_words <- as.vector(FreqMatDF$ST[grepl("^[^[:digit:][:alpha:]]+$", FreqMatDF$ST)])
+head(non_english_words)
+tail(non_english_words)
+
+num_english_words <- length(english_words)
+print( num_english_words )
+
+num_non_english_words <- length(non_english_words)
+print( num_non_english_words )
+```
+
+Percentage of non-english words
+
+```{r pct_non_english_words}
+print( 100 * num_non_english_words / (num_english_words + num_non_english_words))
+```
+
