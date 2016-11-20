@@ -31,7 +31,10 @@ val ngramsCount = ngramDataFrame.
 object MyFunctions {
   def func1(t: Tuple2[String, Int]): String = { 
     val parts = t._1.split(" ")
-    return parts(0) + "," + parts(1) + "," + t._2.toDouble / ngramsCount.toDouble
+    // remove leading and trailing punctuation from word
+    val part_0 = parts(0).replaceFirst("^[^a-zA-Z]+", "").replaceAll("[^a-zA-Z]+$", "");
+    val part_1 = parts(1).replaceFirst("^[^a-zA-Z]+", "").replaceAll("[^a-zA-Z]+$", "");
+    return s"${part_0}\t${part_1}\t${t._2.toDouble/ngramsCount.toDouble}"
   }
 }
 
