@@ -13,16 +13,11 @@ library(shiny)
 shinyServer(function(input, output) {
   
   ff <- read.csv('./faithful.csv')
+  
+  dg <- read.csv('./digrams.csv', header = FALSE, sep = '\t')
    
-  output$distPlot <- renderPlot({
-    
-    # generate bins based on input$bins from ui.R
-    x    <- ff[, 2] 
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
-    
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    
+  output$text1 <- renderText({ 
+    "aaa"
   })
   
 })
