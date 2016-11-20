@@ -1,15 +1,21 @@
 library(shiny)
 
-# Define UI for application that draws a histogram
 shinyUI(fluidPage(
   
-  # Application title
   titlePanel("Text Prediction Application"),
+  hr(),
   
-  # Show a plot of the generated distribution
   mainPanel(
-    textInput("input_text", "Enter text", ""),
-    h5("Predicted text"),
-    textOutput("output_text")
+    h3("Enter text"),
+    p("Enter some text in the box below."),
+    textInput("input_text", ""),
+    tags$ul(
+      tags$li("This application predicts the next word."),
+      tags$li("The top five words are predicted and are displayed below."),
+      tags$li("The predictions are in order with the strongest prediction being first."),
+      tags$li("If there isn't a prediction available, NA is displayed.")
+    ),
+    h3("Predicted text"),
+    htmlOutput("output_text")
   )
 ))

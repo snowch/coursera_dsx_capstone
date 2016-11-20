@@ -8,6 +8,7 @@ shinyServer(function(input, output) {
   getPredictions <- reactive({
     if (nchar(input$input_text) > 0) {
       last_word <- word(input$input_text,-1)
+      last_word <- tolower(last_word)
       found_diagrams <- digrams[ digrams$V1 == last_word, ]
       top_five_digrams <- found_diagrams[ order(found_diagrams$V3, decreasing = TRUE), ][1:5, 2]
       top_five_digrams <- as.character(top_five_digrams)
@@ -19,7 +20,7 @@ shinyServer(function(input, output) {
   })
    
   output$output_text <- renderText({
-    getPredictions()
+    paste("<font color=\"#FF0000\"><b>", getPredictions(), "</b></font>")
   })
   
 })
