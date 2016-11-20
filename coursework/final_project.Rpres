@@ -19,9 +19,10 @@ Algorithm
 
  - The algorithm uses a 2-gram and 3-gram model
  - A large corpus of over 4 million documents used to calculate the next word probabilities
- - Using the user entered text, the model looks up the 2 or 3-ngram with highest probability 
- - Apache Spark running on a 3 node hadoop cluster was used to build the model
- - n-gram models exported to csv files for use in shiny app
+ - Using the user entered text, the 2 or 3-ngram with highest probability is looked up
+ - Apache Spark running on a 3 node hadoop cluster was used to build the n-gram models
+ - n-gram models were exported from spark to csv files for use in shiny app
+ - Hosted shiny apps have a file size limit, so only the higest probability n-grams were kept
 
 Instructions
 ========================================================
