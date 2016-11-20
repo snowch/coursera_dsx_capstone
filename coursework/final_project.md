@@ -1,37 +1,39 @@
-final_project
+Text Predictor Application
 ========================================================
-author: 
-date: 
+author: Chris Snow
+date: 19th November 2016
 autosize: true
 
-First Slide
+
+Overview
 ========================================================
 
-For more details on authoring R presentations please visit <https://support.rstudio.com/hc/en-us/articles/200486468>.
+ - The purpose of this slide deck is to introduce a novel word prediction application
+ - An algorithm has been developed to predict the next word in a sequence of words
+ - Example application is for predictive text typing on mobile phones
+ - This prototype is a minimal viable product (MVP)
+ - Future funding will support more accurate prediction algorithms
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-Slide With Code
+Algorithm
 ========================================================
 
+ - The algorithm uses a 2-gram and 3-gram model
+ - A large corpus of over 4 million documents used to calculate the next word probabilities
+ - Using the user entered text, the model looks up the 2 or 3-ngram with highest probability 
+ - Apache Spark running on a 3 node hadoop cluster was used to build the model
+ - n-gram models exported to csv files for use in shiny app
 
-```r
-summary(cars)
-```
-
-```
-     speed           dist       
- Min.   : 4.0   Min.   :  2.00  
- 1st Qu.:12.0   1st Qu.: 26.00  
- Median :15.0   Median : 36.00  
- Mean   :15.4   Mean   : 42.98  
- 3rd Qu.:19.0   3rd Qu.: 56.00  
- Max.   :25.0   Max.   :120.00  
-```
-
-Slide With Plot
+Instructions
 ========================================================
 
-![plot of chunk unnamed-chunk-2](final_project-figure/unnamed-chunk-2-1.png)
+- Open the URL: https://snowch.shinyapps.io/Text_Predictor/
+- Enter some text in the box labeled 'Enter text'
+- You will be provided a prediction for the next word
+
+Conclusion
+========================================================
+
+- The strength of this approach is using Big Data tools to use large corpus to build model
+- Next step is to refine the algorithm to improve its accuracy
+- Model building source code available here: https://github.com/snowch/coursera_dsx_capstone/tree/master/coursework/spark_ngram_builder
+ 
